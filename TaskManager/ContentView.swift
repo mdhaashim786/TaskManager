@@ -17,24 +17,33 @@ struct ContentView: View {
     private var items: FetchedResults<TaskItem>
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.dueDate ?? Date(), formatter: itemFormatter)")
-                    } label: {
-                        Text(item.dueDate ?? Date(), formatter: itemFormatter)
+        NavigationStack {
+            VStack {
+                if items.isEmpty {
+                    EmptyTaskView()
+                } else {
+                    List {
+                        ForEach(items, id: \.id) { item in
+                            NavigationLink {
+                                Text("Item at \(item.dueDate ?? Date(), formatter: itemFormatter)")
+                            } label: {
+                                Text(item.dueDate ?? Date(), formatter: itemFormatter)
+                            }
+                        }
+                        .onDelete(perform: deleteItems)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
+            .navigationTitle("Tasks")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
                 }
-                ToolbarItem {
+                ToolbarItem(placement: .topBarLeading) {
                     Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                        Label("Add Item", systemImage: "plus.circle.fill")
+                            .foregroundColor(.accentColor)
+                            .scaleEffect(1.1)
                     }
                 }
             }
