@@ -25,11 +25,7 @@ struct ContentView: View {
                 } else {
                     List {
                         ForEach(items, id: \.id) { item in
-                            NavigationLink {
-                                Text("Item at \(item.dueDate ?? Date(), formatter: itemFormatter)")
-                            } label: {
-                                Text(item.dueDate ?? Date(), formatter: itemFormatter)
-                            }
+                            TaskDetailsView(task: item)
                         }
                         .onDelete(perform: deleteItems)
                     }
