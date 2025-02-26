@@ -16,13 +16,26 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<TaskItem>
     @State private var showAddTaskView = false
-
+    
+    private var taskCompletionPercentage: Double {
+        let totalTasks = items.count
+        let completedTasks = items.filter { $0.isCompleted }.count
+        return totalTasks == 0 ? 0 : Double(completedTasks) / Double(totalTasks)
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
                 if items.isEmpty {
                     EmptyTaskView()
                 } else {
+                    HStack {
+                        Text("Task Progress")
+                            .font(.headline)
+                        Spacer()
+                        ProgessIndicator(progress: taskCompletionPercentage)
+                    }
+                    .padding()
                     List {
                         ForEach(items, id: \.id) { item in
                             TaskDetailsView(task: item)
