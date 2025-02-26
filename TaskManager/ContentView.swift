@@ -15,6 +15,7 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \TaskItem.dueDate, ascending: true)],
         animation: .default)
     private var items: FetchedResults<TaskItem>
+    @State private var showAddTaskView = false
 
     var body: some View {
         NavigationStack {
@@ -40,33 +41,15 @@ struct ContentView: View {
                     EditButton()
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: addItem) {
+                    Button(action: { showAddTaskView.toggle() }) {
                         Label("Add Item", systemImage: "plus.circle.fill")
                             .foregroundColor(.accentColor)
                             .scaleEffect(1.1)
                     }
                 }
             }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newTask = TaskItem(context: viewContext)
-            newTask.id = UUID()
-            newTask.title = "New Task"
-            newTask.dueDate = Date()
-            newTask.priority = "Medium"
-            newTask.isCompleted = false
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .sheet(isPresented: $showAddTaskView) {
+                AddTaskView()
             }
         }
     }
