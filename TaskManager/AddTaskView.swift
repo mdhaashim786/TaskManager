@@ -15,6 +15,7 @@ struct AddTaskView: View {
     @State private var description: String = ""
     @State private var dueDate: Date = Date()
     @State private var priority: String = "Medium"
+    @State var isTitleValid: Bool = true
 
     let priorities = ["Low", "Medium", "High"]
 
@@ -22,7 +23,10 @@ struct AddTaskView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Task Info")) {
-                    TextField("Title", text: $title)
+                    TextField(text: $title, label: {
+                        Text("Title")
+                            .foregroundStyle(isTitleValid ? .gray : .red)
+                    })
                     TextField("Description", text: $description)
                 }
                 Section(header: Text("Details")) {
@@ -30,6 +34,11 @@ struct AddTaskView: View {
                         ForEach(priorities, id: \.self) { Text($0) }
                     }
                     DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
+                }
+            }
+            .onChange(of: title) { newValue in
+                if !newValue.isEmpty {
+                    isTitleValid = true
                 }
             }
             .navigationTitle("New Task")
@@ -45,6 +54,10 @@ struct AddTaskView: View {
     }
 
     private func saveTask() {
+        if title.isEmpty {
+            isTitleValid = false
+            return
+        }
         withAnimation {
             let newTask = TaskItem(context: viewContext)
             newTask.id = UUID()
