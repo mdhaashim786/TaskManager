@@ -70,14 +70,16 @@ struct ContentView: View {
                     .padding(.leading, 20)
                     
                     
-                        if filteredTasks.isEmpty {
-                            Spacer()
-                            EmptyTaskView(taskType: filter, allEmpty: false)
-                            Spacer()
-                        } else {
-                            List {
+                    if filteredTasks.isEmpty {
+                        Spacer()
+                        EmptyTaskView(taskType: filter, allEmpty: false)
+                        Spacer()
+                    } else {
+                        List {
                             ForEach(filteredTasks, id: \.id) { item in
-                                TaskDetailsView(task: item)
+                                NavigationLink(destination: TaskDetailsView(task: item)) {
+                                    Text("\(item.title ?? "")")
+                                }
                             }
                             .onDelete(perform: deleteItems)
                         }
