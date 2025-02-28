@@ -16,6 +16,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<TaskItem>
     @State private var showAddTaskView = false
+    @State private var filter: TaskFilter = .all
     
     private var taskCompletionPercentage: Double {
         let totalTasks = items.count
@@ -36,8 +37,30 @@ struct ContentView: View {
                         ProgessIndicator(progress: taskCompletionPercentage)
                     }
                     .padding()
+                    
+                    HStack {
+                        FilterButton(title: "All", isSelected: filter == .all) {
+                            filter = .all
+                        }
+                        
+                        FilterButton(title: "Pending", isSelected: filter == .pending) {
+                            filter = .pending
+                        }
+                        
+                        FilterButton(title: "Completed", isSelected: filter == .completed) {
+                            filter = .completed
+                        }
+                        
+                        
+                        Spacer()
+                    }
+                    .padding(.leading, 20)
+                    
+                   
+                    
+                    
                     List {
-                        ForEach(items, id: \.id) { item in
+                        ForEach(filteredTasks, id: \.id) { item in
                             TaskDetailsView(task: item)
                         }
                         .onDelete(perform: deleteItems)
@@ -62,6 +85,15 @@ struct ContentView: View {
             }
         }
     }
+    
+    private var filteredTasks: [TaskItem] {
+        switch filter {
+        case .all: return items.map { $0 }
+        case .pending: return items.filter { !$0.isCompleted }
+        case .completed: return items.filter { $0.isCompleted }
+        }
+    }
+
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
