@@ -17,6 +17,7 @@ struct ContentView: View {
     private var items: FetchedResults<TaskItem>
     @State private var showAddTaskView = false
     @State private var filter: TaskFilter = .all
+    @State private var sortOption: SortOption = .dueDate
     
     private var taskCompletionPercentage: Double {
         let totalTasks = items.count
@@ -28,7 +29,7 @@ struct ContentView: View {
         NavigationStack {
             VStack {
                 if items.isEmpty {
-                    EmptyTaskView()
+                    EmptyTaskView(taskType: .all, allEmpty: true)
                 } else {
                     HStack {
                         Text("Task Progress")
@@ -51,23 +52,42 @@ struct ContentView: View {
                             filter = .completed
                         }
                         
-                        
                         Spacer()
+                        
+                        Menu {
+                            ForEach(SortOption.allCases, id: \.self) { option in
+                                Button(action: { sortOption = option }) {
+                                    Text(option.rawValue)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease")
+                                .font(.title)
+                                .padding(.trailing, 10)
+                        }
+                       
                     }
                     .padding(.leading, 20)
                     
-                   
                     
-                    
-                    List {
-                        ForEach(filteredTasks, id: \.id) { item in
-                            TaskDetailsView(task: item)
+                        if filteredTasks.isEmpty {
+                            Spacer()
+                            EmptyTaskView(taskType: filter, allEmpty: false)
+                            Spacer()
+                        } else {
+                            List {
+                            ForEach(filteredTasks, id: \.id) { item in
+                                TaskDetailsView(task: item)
+                            }
+                            .onDelete(perform: deleteItems)
                         }
-                        .onDelete(perform: deleteItems)
                     }
                 }
             }
             .navigationTitle("Tasks")
+            .onChange(of: sortOption) { newValue in
+                sortOption = newValue
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
@@ -86,11 +106,37 @@ struct ContentView: View {
         }
     }
     
+ 
     private var filteredTasks: [TaskItem] {
+        
+        let filteredItems: [TaskItem]
         switch filter {
-        case .all: return items.map { $0 }
-        case .pending: return items.filter { !$0.isCompleted }
-        case .completed: return items.filter { $0.isCompleted }
+        case .all: filteredItems = items.map { $0 }
+        case .pending: filteredItems = items.filter { !$0.isCompleted }
+        case .completed: filteredItems = items.filter { $0.isCompleted }
+            
+        }
+        
+        switch sortOption {
+            
+        case .priority:
+            return filteredItems.sorted { $0.priorityValue > $1.priorityValue }
+            
+        case .dueDate:
+            return filteredItems.sorted {
+                guard let date1 = $0.dueDate, let date2 = $1.dueDate else {
+                    return $0.dueDate != nil
+                }
+                return date1 < date2
+            }
+            
+        case .alphabetically:
+            return filteredItems.sorted {
+                guard let title1 = $0.title?.lowercased(), let title2 = $1.title?.lowercased() else {
+                    return $0.title != nil
+                }
+                return title1 < title2
+            }
         }
     }
 

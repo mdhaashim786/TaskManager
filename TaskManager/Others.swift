@@ -12,6 +12,12 @@ enum TaskFilter: String {
     case completed
 }
 
+enum SortOption: String, CaseIterable {
+    case priority
+    case dueDate
+    case alphabetically
+}
+
 struct FilterButton: View {
     let title: String
     let isSelected: Bool
@@ -30,5 +36,16 @@ struct FilterButton: View {
         }
         .background(isSelected ? selectedColor : filterColor)
         .cornerRadius(10)
+    }
+}
+
+extension TaskItem {
+    var priorityValue: Int16 {
+        switch priority {
+        case "Low": return 1
+        case "Medium": return 2
+        case "High": return 3
+        default: return 0
+        }
     }
 }
