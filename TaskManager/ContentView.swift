@@ -21,6 +21,7 @@ struct ContentView: View {
     @State private var lastDeletedTask: TaskItem?
     
     @State private var showUndoAlert = false
+    @StateObject private var colorManager = AccentColorManager()
     
     private var taskCompletionPercentage: Double {
         let totalTasks = items.count
@@ -30,65 +31,86 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                if items.isEmpty {
-                    EmptyTaskView(taskType: .all, allEmpty: true)
-                } else {
-                    HStack {
-                        Text("Task Progress")
-                            .font(.headline)
-                        Spacer()
-                        ProgessIndicator(progress: taskCompletionPercentage)
-                    }
-                    .padding()
-                    
-                    HStack {
-                        FilterButton(title: "All", isSelected: filter == .all) {
-                            filter = .all
-                        }
-                        
-                        FilterButton(title: "Pending", isSelected: filter == .pending) {
-                            filter = .pending
-                        }
-                        
-                        FilterButton(title: "Completed", isSelected: filter == .completed) {
-                            filter = .completed
-                        }
-                        
-                        Spacer()
-                        
-                        Menu {
-                            ForEach(SortOption.allCases, id: \.self) { option in
-                                Button(action: { sortOption = option }) {
-                                    Text(option.rawValue)
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease")
-                                .font(.title)
-                                .padding(.trailing, 10)
-                        }
-                       
-                    }
-                    .padding(.leading, 20)
-                    
-                    
-                    if filteredTasks.isEmpty {
-                        Spacer()
-                        EmptyTaskView(taskType: filter, allEmpty: false)
-                        Spacer()
+            ZStack(alignment: .bottomTrailing) {
+                VStack {
+                    if items.isEmpty {
+                        EmptyTaskView(taskType: .all, allEmpty: true)
                     } else {
-                        List {
-                            ForEach(filteredTasks, id: \.id) { item in
-                                NavigationLink(destination: TaskDetailsView(task: item)) {
-                                    Text("\(item.title ?? "")")
-                                }
+                        HStack {
+                            Text("Task Progress")
+                                .font(.headline)
+                            Spacer()
+                            ProgessIndicator(progress: taskCompletionPercentage)
+                        }
+                        .padding()
+                        
+                        HStack {
+                            FilterButton(title: "All", isSelected: filter == .all) {
+                                filter = .all
                             }
-                            .onMove(perform: moveTask)
-                            .onDelete(perform: deleteItems)
+                            
+                            FilterButton(title: "Pending", isSelected: filter == .pending) {
+                                filter = .pending
+                            }
+                            
+                            FilterButton(title: "Completed", isSelected: filter == .completed) {
+                                filter = .completed
+                            }
+                            
+                            Spacer()
+                            
+                            Menu {
+                                ForEach(SortOption.allCases, id: \.self) { option in
+                                    Button(action: { sortOption = option }) {
+                                        Text(option.rawValue)
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "line.3.horizontal.decrease")
+                                    .font(.title)
+                                    .padding(.trailing, 10)
+                            }
+                            
+                        }
+                        .padding(.leading, 20)
+                        
+                        
+                        if filteredTasks.isEmpty {
+                            Spacer()
+                            EmptyTaskView(taskType: filter, allEmpty: false)
+                            Spacer()
+                        } else {
+                            List {
+                                ForEach(filteredTasks, id: \.id) { item in
+                                    NavigationLink(destination: TaskDetailsView(task: item)) {
+                                        HStack {
+                                            Text("\(item.title ?? "")")
+                                            
+                                            if item.isCompleted {
+                                                Image(systemName: "checkmark.seal.fill")
+                                            }
+                                           
+                                        }
+                                    }
+                                }
+                                .onMove(perform: moveTask)
+                                .onDelete(perform: deleteItems)
+                            }
                         }
                     }
                 }
+                NavigationLink(destination: SettingsView(colorManager: colorManager)) {
+                    Image(systemName: "gearshape.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .shadow(radius: 5)
+                }
+                .padding()
+                
             }
             .navigationTitle("Tasks")
             .onChange(of: sortOption) { newValue in
@@ -121,6 +143,7 @@ struct ContentView: View {
                 Text("Do you want to undo the delete?")
             }
         }
+        .accentColor(colorManager.currentColor)
     }
     
     func undoDelete() {

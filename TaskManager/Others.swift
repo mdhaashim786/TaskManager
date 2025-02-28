@@ -49,3 +49,17 @@ extension TaskItem {
         }
     }
 }
+
+enum AccentColor: String, CaseIterable {
+    case blue, green, red, purple, orange
+    
+    var color: Color {
+        switch self {
+        case .blue: return .blue
+        case .green: return .green
+        case .red: return .red
+        case .purple: return .purple
+        case .orange: return .orange
+        }
+    }
+}

@@ -10,6 +10,7 @@ import SwiftUI
 struct AddTaskView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var colorManager = AccentColorManager()
 
     @State private var title: String = ""
     @State private var description: String = ""
@@ -50,6 +51,7 @@ struct AddTaskView: View {
                     Button("Save") { saveTask() }
                 }
             }
+            .accentColor(colorManager.currentColor)
         }
     }
 

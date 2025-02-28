@@ -32,18 +32,22 @@ struct TaskDetailsView: View {
                 Divider()
                 
                 if task.isCompleted {
-                    VStack(spacing: 10) {
-                        Image(systemName: "checkmark.seal.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(.green)
-                        
-                        Text("Task Completed!")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.green)
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 10) {
+                            Image(systemName: "checkmark.seal.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.accentColor )
+                            
+                            Text("Task Completed!")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.accentColor)
+                        }
+                        .padding(.top, 10)
+                        Spacer()
                     }
-                    .padding(.top, 10)
                 } else {
                     VStack(spacing: 10) {
                         Button(action: toggleCompletion) {
