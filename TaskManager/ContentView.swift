@@ -84,6 +84,7 @@ struct ContentView: View {
                                     Text("\(item.title ?? "")")
                                 }
                             }
+                            .onMove(perform: moveTask)
                             .onDelete(perform: deleteItems)
                         }
                     }
@@ -165,11 +166,15 @@ struct ContentView: View {
         }
     }
 
-
+    private func moveTask(from source: IndexSet, to destination: Int) {
+        var tasksArray = filteredTasks.map { $0 } // Convert FetchedResults to an array
+        tasksArray.move(fromOffsets: source, toOffset: destination)
+        saveChanges()
+    }
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.map { filteredTasks[$0] }.forEach(viewContext.delete)
-            //lastDeletedTask = items[$0]
             if let index = offsets.first {
                 let task = filteredTasks[index] // Accessing the element
                 lastDeletedTask = task
@@ -180,7 +185,7 @@ struct ContentView: View {
     }
     private func saveChanges() {
         do {
-            
+            try viewContext.save()
         } catch {
             print("Failed to save: \(error.localizedDescription)")
         }
