@@ -14,6 +14,7 @@ struct TaskManagerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .dynamicTypeSize(.medium)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
