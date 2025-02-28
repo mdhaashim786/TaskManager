@@ -94,9 +94,12 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: { showAddTaskView.toggle() }) {
-                        Label("Add Item", systemImage: "plus.circle.fill")
-                            .foregroundColor(.accentColor)
-                            .scaleEffect(1.1)
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            Label("Add Item", systemImage: "plus.circle.fill")
+                                .foregroundColor(.accentColor)
+                                .scaleEffect(1.1)
+                            
+                        }
                     }
                 }
             }
