@@ -86,6 +86,8 @@ struct TaskDetailsView: View {
     
     
     private func toggleCompletion() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback.impactOccurred()
         task.isCompleted = true
         saveChanges()
         dismiss()

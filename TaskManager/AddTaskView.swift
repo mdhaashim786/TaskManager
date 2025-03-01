@@ -61,6 +61,9 @@ struct AddTaskView: View {
             return
         }
         withAnimation {
+            let impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+            impactFeedback.impactOccurred()
+            
             let newTask = TaskItem(context: viewContext)
             newTask.id = UUID()
             newTask.title = title
