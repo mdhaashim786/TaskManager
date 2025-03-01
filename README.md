@@ -64,7 +64,7 @@ It follows **Apple's Human Interface Guidelines (HIG)**, focusing on **smooth an
 import Foundation
 import CoreData
 
-@objc(Task)
+@objc(TaskItem)
 public class TaskItem: NSManagedObject {}
 
 extension TaskItem {
