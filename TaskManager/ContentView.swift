@@ -148,7 +148,9 @@ struct ContentView: View {
                 Button("Undo", role: .cancel) {
                     undoDelete()
                 }
-                Button("Dismiss", role: .destructive) {}
+                Button("Dismiss", role: .destructive) {
+                    saveChanges()
+                }
             } message: {
                 Text("Do you want to undo the delete?")
             }
@@ -158,10 +160,10 @@ struct ContentView: View {
     
     func undoDelete() {
         if let task = lastDeletedTask {
+            
             viewContext.insert(task)
             lastDeletedTask = nil
             
-            saveChanges()
         }
     }
     
@@ -212,7 +214,6 @@ struct ContentView: View {
                 let task = filteredTasks[index] // Accessing the element
                 lastDeletedTask = task
             }
-            saveChanges()
             showUndoAlert = true
         }
     }
