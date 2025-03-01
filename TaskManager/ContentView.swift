@@ -91,6 +91,7 @@ struct ContentView: View {
                                             
                                             if item.isCompleted {
                                                 Image(systemName: "checkmark.seal.fill")
+                                                    .foregroundStyle(colorManager.currentColor)
                                             }
                                            
                                         }
@@ -102,7 +103,7 @@ struct ContentView: View {
                                     } label: {
                                         Label("Complete", systemImage: "checkmark")
                                     }
-                                    .tint(.green)  
+                                    .tint(.green)
                                 }
                                     
                                 }
