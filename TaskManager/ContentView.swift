@@ -95,6 +95,16 @@ struct ContentView: View {
                                            
                                         }
                                     }
+                                 .swipeActions(edge: .leading) {
+                                    Button {
+                                        item.isCompleted = true
+                                        saveChanges()
+                                    } label: {
+                                        Label("Complete", systemImage: "checkmark")
+                                    }
+                                    .tint(.green)  
+                                }
+                                    
                                 }
                                 .onMove(perform: moveTask)
                                 .onDelete(perform: deleteItems)
