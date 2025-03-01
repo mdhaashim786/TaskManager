@@ -84,7 +84,6 @@ extension TaskItem {
 ### Sample data for preview
 
 ```swift
-
 import CoreData
 
 struct SampleData {
@@ -120,12 +119,13 @@ struct SampleData {
         }
     }
 }
+```
 
 In preview we can add as below
 
 ```swift
 SampleData.populateSampleTasks(context: PersistenceController.shared.container.viewContext)
-
+```
 
 
 ## 📦 **Setup Instructions**
