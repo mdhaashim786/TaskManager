@@ -140,8 +140,8 @@ Ensure you have:
 ### **📥 Installation**
 1️⃣ **Clone the repository**  
 ```sh
-git clone https://github.com/your-repo/task-manager-swiftui.git
-cd task-manager-swiftui
+git clone https://github.com/mdhaashim786/TaskManager.git
+cd TaskManager
 ```
 
 2️⃣ **Open the project in Xcode**
