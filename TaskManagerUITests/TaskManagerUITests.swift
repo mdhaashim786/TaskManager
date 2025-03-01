@@ -23,12 +23,48 @@ final class TaskManagerUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
+    func testTaskCreationFlow() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
+        let addItemButton = app.buttons["Add Item"]
+        XCTAssertTrue(addItemButton.exists, "The 'Add Item' button should exist on the screen")
+        addItemButton.tap()
+        
+        let titleTextField = app.textFields["titleTextField"]
+        XCTAssertTrue(titleTextField.exists, "Title TextField should exist")
+        titleTextField.tap()
+        titleTextField.typeText("My New Task")
+        
+        
+        let descriptionTextField = app.textFields["descriptionTextField"]
+        XCTAssertTrue(descriptionTextField.exists, "Description TextField should exist")
+        descriptionTextField.tap()
+        descriptionTextField.typeText("test description.")
+        
+        let saveButton = app.buttons["Save"]
+        XCTAssertTrue(saveButton.exists, "The 'Save' button should exist on the screen")
+        saveButton.tap()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    @MainActor
+    func testFilterFunctionality() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let completedButton = app.buttons["Completed"]
+        XCTAssertTrue(completedButton.exists, "The 'Completed' button should exist on the screen")
+        completedButton.tap()
+        
+        let pendingButton = app.buttons["Pending"]
+        XCTAssertTrue(pendingButton.exists, "The 'Pending' button should exist on the screen")
+        pendingButton.tap()
+        
+        let allTasksButton = app.buttons["All"]
+        XCTAssertTrue(allTasksButton.exists, "The 'All' button should exist on the screen")
+        allTasksButton.tap()
     }
 
     @MainActor

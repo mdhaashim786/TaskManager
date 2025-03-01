@@ -28,7 +28,9 @@ struct AddTaskView: View {
                         Text("Title")
                             .foregroundStyle(isTitleValid ? .gray : .red)
                     })
+                    .accessibilityIdentifier("titleTextField")
                     TextField("Description", text: $description)
+                        .accessibilityIdentifier("descriptionTextField")
                 }
                 Section(header: Text("Details")) {
                     Picker("Priority", selection: $priority) {
