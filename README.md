@@ -142,10 +142,12 @@ Ensure you have:
 ```sh
 git clone https://github.com/your-repo/task-manager-swiftui.git
 cd task-manager-swiftui
+```
 
 2️⃣ **Open the project in Xcode**
 ```sh
 open TaskManager.xcodeproj
+```
 
 3️⃣ **Run the app**
 Select any simulator 
