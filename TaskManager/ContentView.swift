@@ -34,7 +34,10 @@ struct ContentView: View {
             ZStack(alignment: .bottomTrailing) {
                 VStack {
                     if items.isEmpty {
+                        Spacer()
                         EmptyTaskView(taskType: .all, allEmpty: true)
+                            .frame(maxWidth: .infinity, alignment: .center) 
+                        Spacer()
                     } else {
                         HStack {
                             Text("Task Progress")
@@ -99,17 +102,24 @@ struct ContentView: View {
                         }
                     }
                 }
-                NavigationLink(destination: SettingsView(colorManager: colorManager)) {
-                    Image(systemName: "gearshape.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.white)
+                .frame(maxHeight: .infinity, alignment: .top)
+                VStack {
+                    Spacer() // Pushes the NavigationLink to the bottom
+                    HStack {
+                        Spacer()
+                        NavigationLink(destination: SettingsView(colorManager: colorManager)) {
+                            Image(systemName: "gearshape.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.blue)
+                                .clipShape(Circle())
+                                .shadow(radius: 5)
+                        }
                         .padding()
-                        .background(Color.blue)
-                        .clipShape(Circle())
-                        .shadow(radius: 5)
+                    }
                 }
-                .padding()
                 
             }
             .navigationTitle("Tasks")
