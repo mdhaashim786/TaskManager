@@ -14,14 +14,29 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = TaskItem(context: viewContext)
-            newItem.id = UUID()
-            newItem.title = "Test Item"
-            newItem.priority = "high"
-            newItem.isCompleted = false
-            newItem.dueDate = Date()
-        }
+        let task1 = TaskItem(context: viewContext)
+        task1.id = UUID()
+        task1.title = "Buy groceries"
+        task1.titleDescription = "Milk, eggs, bread"
+        task1.priority = "High"
+        task1.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        task1.isCompleted = false
+        
+        let task2 = TaskItem(context: viewContext)
+        task2.id = UUID()
+        task2.title = "Complete SwiftUI project"
+        task2.titleDescription = "Finish the animations and polish UI"
+        task2.priority = "Medium"
+        task2.dueDate = Calendar.current.date(byAdding: .day, value: 3, to: Date())
+        task2.isCompleted = false
+        
+        let task3 = TaskItem(context: viewContext)
+        task3.id = UUID()
+        task3.title = "Workout"
+        task3.titleDescription = "Morning exercise routine"
+        task3.priority = "Low"
+        task3.dueDate = Calendar.current.date(byAdding: .day, value: 0, to: Date())
+        task3.isCompleted = false
         do {
             try viewContext.save()
         } catch {
