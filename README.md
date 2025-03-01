@@ -74,7 +74,7 @@ extension TaskItem {
 
     @NSManaged public var id: UUID
     @NSManaged public var title: String
-    @NSManaged public var taskDescription: String?
+    @NSManaged public var titleDescription: String?
     @NSManaged public var priority: String
     @NSManaged public var dueDate: Date?
     @NSManaged public var isCompleted: Bool
@@ -88,26 +88,26 @@ import CoreData
 
 struct SampleData {
     static func populateSampleTasks(context: NSManagedObjectContext) {
-        let task1 = Task(context: context)
+        let task1 = TaskItem(context: viewContext)
         task1.id = UUID()
         task1.title = "Buy groceries"
-        task1.taskDescription = "Milk, eggs, bread"
+        task1.titleDescription = "Milk, eggs, bread"
         task1.priority = "High"
         task1.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
         task1.isCompleted = false
-
-        let task2 = Task(context: context)
+        
+        let task2 = TaskItem(context: viewContext)
         task2.id = UUID()
         task2.title = "Complete SwiftUI project"
-        task2.taskDescription = "Finish the animations and polish UI"
+        task2.titleDescription = "Finish the animations and polish UI"
         task2.priority = "Medium"
         task2.dueDate = Calendar.current.date(byAdding: .day, value: 3, to: Date())
         task2.isCompleted = false
-
-        let task3 = Task(context: context)
+        
+        let task3 = TaskItem(context: viewContext)
         task3.id = UUID()
         task3.title = "Workout"
-        task3.taskDescription = "Morning exercise routine"
+        task3.titleDescription = "Morning exercise routine"
         task3.priority = "Low"
         task3.dueDate = Calendar.current.date(byAdding: .day, value: 0, to: Date())
         task3.isCompleted = false
